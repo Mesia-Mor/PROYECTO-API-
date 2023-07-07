@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulario de Personas</title>
+  <link rel="stylesheet" type="text/css" href="estilo pacientes.css">
+</head>
+<body>
+  <div class="container">
+    <img src="foto pacientes .jpg" alt="Pacientes" class="pacientes">
+    <h2>Formulario de <strong>Personas</strong></h2>
+   
+    <form id="formulario-persona">
+      <label for="nombre"><strong>Nombre:</strong></label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label for="cedula"><strong>Número de cédula:</strong></label>
+      <input type="text" id="cedula" name="cedula" required>
+
+      <label for="apellido"><strong>Apellido:</strong></label>
+      <input type="text" id="apellido" name="apellido" required>
+
+      <label for="edad"><strong>Edad:</strong></label>
+      <input type="number" id="edad" name="edad" required min="0" max="100">
+
+      <label for="telefono"><strong>Teléfono:</strong></label>
+      <input type="tel" id="telefono" name="telefono" required pattern="[0-9]{10}" title="El número de teléfono debe tener 10 dígitos">
+
+      <input type="submit" value="Enviar">
+    </form>
+
+    <div class="return-button">
+      <button onclick="goBack()">Volver a la página anterior</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js"></script>
+  <script>
+    document.getElementById("formulario-persona").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const nombre = document.getElementById("nombre").value;
+      const cedula = document.getElementById("cedula").value;
+      const apellido = document.getElementById("apellido").value;
+      const edad = document.getElementById("edad").value;
+      const telefono = document.getElementById("telefono").value;
+
+      const datosPersona = {
+        nombre: nombre,
+        cedula: cedula,
+        apellido: apellido,
+        edad: edad,
+        telefono: telefono
+      };
+
+      axios.post('/api/pacientes', datosPersona)
+        .then(function(response) {
+          console.log(response.data);
+          alert("La persona ha sido registrada exitosamente.");
+
+          // Limpiar los campos del formulario
+          document.getElementById("nombre").value = "";
+          document.getElementById("cedula").value = "";
+          document.getElementById("apellido").value = "";
+          document.getElementById("edad").value = "";
+          document.getElementById("telefono").value = "";
+        })
+        .catch(function(error) {
+          console.error(error);
+          alert("Error al registrar la persona. Por favor, inténtalo de nuevo.");
+        });
+    });
+
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+  <script src="scripts.js"></script>
+</body>
+</html>

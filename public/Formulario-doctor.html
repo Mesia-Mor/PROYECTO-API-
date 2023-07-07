@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulario de Doctores</title>
+  <link rel="stylesheet" type="text/css" href="estilo doctores.css">
+</head>
+<body>
+  <div class="container">
+    <img src="imagen doctores .jpg" alt="Doctor" class="doctor-image">
+    
+    <form id="formulario-doctor">
+      <h2>Formulario de <strong>Doctores</strong></h2>
+
+      <label for="nombre"><strong>Nombre:</strong></label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label for="apellido"><strong>Apellido:</strong></label>
+      <input type="text" id="apellido" name="apellido" required>
+
+      <label for="especialidad"><strong>Especialidad:</strong></label>
+      <select id="especialidad" name="especialidad">
+        <option value="Medicina general">Medicina general</option>
+        <option value="Cardiología">Cardiología</option>
+        <option value="Medicina interna">Medicina interna</option>
+        <option value="Dermatología">Dermatología</option>
+        <option value="Rehabilitación física">Rehabilitación física</option>
+        <option value="Psicología">Psicología</option>
+        <option value="Odontología">Odontología</option>
+        <option value="Radiología">Radiología</option>
+      </select>
+
+      <label for="consultorio"><strong>Consultorio:</strong></label>
+      <input type="text" id="consultorio" name="consultorio" required>
+
+      <label for="correo"><strong>Correo de contacto:</strong></label>
+      <input type="email" id="correo" name="correo" required>
+
+      <input type="submit" value="Enviar">
+    </form>
+    
+    <div class="return-button">
+      <button onclick="goBack()">Volver a la página anterior</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js"></script>
+  <script>
+    document.getElementById("formulario-doctor").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const nombre = document.getElementById("nombre").value;
+      const apellido = document.getElementById("apellido").value;
+      const especialidad = document.getElementById("especialidad").value;
+      const consultorio = document.getElementById("consultorio").value;
+      const correo = document.getElementById("correo").value;
+
+      const datosDoctor = {
+        nombre: nombre,
+        apellido: apellido,
+        especialidad: especialidad,
+        consultorio: consultorio,
+        correo: correo
+      };
+
+      document.getElementById("formulario-doctor").addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  // Obtener los valores de los campos del formulario
+  const nombre = document.getElementById("nombre").value;
+  const apellido = document.getElementById("apellido").value;
+  const especialidad = document.getElementById("especialidad").value;
+  const consultorio = document.getElementById("consultorio").value;
+  const correo = document.getElementById("correo").value;
+
+  // Crear un objeto con los datos del doctor
+  const datosDoctor = {
+    nombre: nombre,
+    apellido: apellido,
+    especialidad: especialidad,
+    consultorio: consultorio,
+    correo: correo
+  };
+
+  // Obtener los datos existentes del almacenamiento local
+  let medicos = [];
+  let localMedicos = localStorage.getItem("listado-medicos");
+  if (localMedicos) {
+    medicos = JSON.parse(localMedicos);
+  }
+
+  // Agregar el nuevo doctor a la lista
+  medicos.push(datosDoctor);
+
+  // Guardar la lista actualizada en el almacenamiento local
+  localStorage.setItem("listado-medicos", JSON.stringify(medicos));
+
+  // Limpiar los campos del formulario
+  document.getElementById("nombre").value = "";
+  document.getElementById("apellido").value = "";
+  document.getElementById("especialidad").value = "Medicina general";
+  document.getElementById("consultorio").value = "";
+  document.getElementById("correo").value = "";
+
+  alert("El doctor ha sido registrado exitosamente.");
+});
+
+      axios.post('/api/doctores', datosDoctor)
+        .then(function(response) {
+          console.log(response.data);
+          alert("El doctor ha sido registrado exitosamente.");
+
+          // Limpiar los campos del formulario
+          document.getElementById("nombre").value = "";
+          document.getElementById("apellido").value = "";
+          document.getElementById("especialidad").value = "Medicina general";
+          document.getElementById("consultorio").value = "";
+          document.getElementById("correo").value = "";
+        })
+        .catch(function(error) {
+          console.error(error);
+          alert("Error al registrar el doctor. Por favor, inténtalo de nuevo.");
+        });
+    });
+
+    function goBack() {
+      window.history.back();
+    }
+    
+  </script>
+  <script src="scripts.js"></script>
+</main>
+<script src="../public/html/medicos.html"></script>
+</body>
+</html>

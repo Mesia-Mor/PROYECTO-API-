@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulario de Cita Médica</title>
+  <link rel="stylesheet" type="text/css" href="styles citas.css">
+</head>
+<body>
+  <div class="container">
+    <img src="foto de cita medica .jpg" alt="cita" class="cita-image">
+    <h2>Formulario de <strong>Cita Médica</strong></h2>
+
+<form id="formulario-cita">
+  <label for="numeroDocumento">Número de Documento del Paciente:</label>
+  <input type="text" id="numeroDocumento" name="numeroDocumento" required>
+
+  <label for="especialidad"><strong>Especialidad:</strong></label>
+  <select id="especialidad" name="especialidad">
+    <option value="Medicina general">Medicina general</option>
+    <option value="Cardiología">Cardiología</option>
+    <option value="Medicina interna">Medicina interna</option>
+    <option value="Dermatología">Dermatología</option>
+    <option value="Rehabilitación física">Rehabilitación física</option>
+    <option value="Psicología">Psicología</option>
+    <option value="Odontología">Odontología</option>
+    <option value="Radiología">Radiología</option>
+  </select>
+
+  <label for="doctor"><strong>Doctor:</strong></label>
+  <select id="doctor" name="doctor">
+    <option value="Dr. Juan Arias">Dr. Juan Arias</option>
+    <option value="Dra. Ana García">Dra. Ana García</option>
+    <option value="Dr. Luis Rodríguez">Dr. Luis Rodríguez</option>
+    <option value="Dra. María López">Dra. María López</option>
+    <option value="Dr. Joan Chavez">Dr. Joan Chavez</option>
+    <option value="Dra. Ingrid Gonzalez">Dra. Ingrid Gonzalez</option>
+    <option value="Dra. Sandra Beltran">Dra. Sandra Beltran</option>
+    <option value="Dr. Pablo Sanchez">Dr. Pablo Sanchez</option>
+  </select>
+
+  <label for="paciente"><strong>Paciente:</strong></label>
+  <input type="text" id="paciente" name="paciente" required>
+
+  <input type="submit" value="Enviar">
+</form>
+
+
+<div class="return-button">
+  <button onclick="goBack()">Volver a la página anterior</button>
+</div>
+  </div>
+  <script>
+    document.getElementById("formulario-cita").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const numeroDocumento = document.getElementById("numeroDocumento").value;
+      const especialidad = document.getElementById("especialidad").value;
+      const doctor = document.getElementById("doctor").value;
+      const paciente = document.getElementById("paciente").value;
+
+      const datosCita = {
+        numeroDocumento: numeroDocumento,
+        especialidad: especialidad,
+        doctor: doctor,
+        paciente: paciente
+      };
+
+      fetch('/api/citas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datosCita)
+      })
+      .then(function(response) {
+        if (response.ok) {
+          console.log(response);
+          alert("La cita ha sido registrada exitosamente.");
+        } else {
+          throw new Error("Error al registrar la cita. Por favor, inténtalo de nuevo.");
+        }
+      })
+      .catch(function(error) {
+        console.error(error);
+        alert(error.message);
+      });
+    });
+
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+  <script src="scripts.js"></script>
+</body>
+</html>
